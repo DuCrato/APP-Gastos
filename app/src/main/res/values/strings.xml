@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">MyPocket</string>
+    <string name="label_bar_cadastro">Cadastrar gasto</string>
+    <string name="label_description">Descrição</string>
+    <string name="label_valor">Valor</string>
+    <string name="label_date">Data</string>
+    <string name="label_monthly_expense">Gasto mensal</string>
+    <string name="label_parcel">Parcelar</string>
+    <string name="label_parcel_mounths">01</string>
+    <string name="label_delete_expense">Excluir gasto</string>
+    <string name="label_save_expense">Salvar gasto</string>
+    <string name="label_back_mounth">voltar mes</string>
+    <string name="label_next_mounth">TODO</string>
+    <string name="label_total_payable">Total a pagar</string>
+    <string name="label_balance_to_pay">Saldo pago</string>
+    <string name="label_mounth">Março</string>
+    <string name="label_value_main">3.456,56</string>
+    <string name="label_paid_main">456,56</string>
+</resources>

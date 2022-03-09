@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="text_size_item">28sp</dimen>
+    <dimen name="text_size_item_second">20sp</dimen>
+
+    <dimen name="margin_large">32dp</dimen>
+    <dimen name="margin_default">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+
+    <dimen name="btn_width">210dp</dimen>
+    <dimen name="btn_height">60dp</dimen>
+
+</resources>
