@@ -16,4 +16,6 @@
     <string name="label_mounth">Março</string>
     <string name="label_value_main">3.456,56</string>
     <string name="label_paid_main">456,56</string>
+
+    <string name="edit_state">Editar gasto</string>
 </resources>

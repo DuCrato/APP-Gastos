@@ -31,9 +31,9 @@ class ExpenseListAdapter : ListAdapter<Expense, ExpenseListAdapter.ExpenseViewHo
             fun bind(item: Expense){
 
                 binding.txtItemDescription.text = item.descrip
-                binding.txtItemValue.text = item.value
-                binding.txtItemDate.text = item.date
-                binding.txtItemParcel.text = item.parcel.toString()
+                binding.txtItemValue.text       = item.value
+                binding.txtItemDate.text        = item.date
+                binding.txtItemParcel.text      = item.parcel
             }
     }
 }

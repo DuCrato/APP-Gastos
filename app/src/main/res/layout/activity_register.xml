@@ -104,6 +104,7 @@
         android:backgroundTint="#FF0000"
         android:text="@string/label_delete_expense"
         android:textSize="20sp"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/til_parcel" />
