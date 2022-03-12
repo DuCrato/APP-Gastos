@@ -2,9 +2,10 @@ package com.example.mypocket.model
 
 data class Expense(
 
-    val id: Int = 0,
-    val descrip: String,
-    val value: String,
-    val date: String,
-    val parcel: Int = 1
+    var id      : Int = 0,
+    var descrip : String = "",
+    var value   : String = "",
+    var date    : String = "",
+    var parcel  : String = "",
+    var paid    : String = ""
 )

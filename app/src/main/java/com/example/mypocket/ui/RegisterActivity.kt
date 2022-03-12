@@ -51,7 +51,7 @@ class RegisterActivity : AppCompatActivity() {
                 descrip = binding.tilDescription.text,
                 value = binding.tilValor.text,
                 date = binding.tilDate.text,
-                parcel = binding.tilParcel.text.toInt()
+                parcel = binding.tilParcel.text
             )
             ExpenseDataSource.insertExpense(expense)
 
