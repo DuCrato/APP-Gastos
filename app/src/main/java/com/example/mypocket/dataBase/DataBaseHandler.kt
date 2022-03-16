@@ -14,20 +14,21 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
     override fun onCreate(db: SQLiteDatabase?) {
 
         val CREATE_TABLE = "CREATE TABLE $TABLE_NAME (" +
-                "$ID      INTERGER NOT NULL," +
-                "$DESCRIP TEXT     NOT NULL," +
-                "$VALUE   TEXT     NOT NULL," +
-                "$DATE    TEXT     NOT NULL," +
-                "$PARCEL  TEXT             ," +
-                "$PAID    TEXT     NOT NULL," +
+                "$COLUMN_NAME_ID      INTERGER NOT NULL," +
+                "$COLUMN_NAME_DESCRIP TEXT     NOT NULL," +
+                "$COLUMN_NAME_VALUE   TEXT     NOT NULL," +
+                "$COLUMN_NAME_DATE    TEXT     NOT NULL," +
+                "$COLUMN_NAME_PARCEL  TEXT             ," +
+                "$COLUMN_NAME_PAID    TEXT     NOT NULL," +
                 "" +
-                "PRIMARY KEY($ID)"            +
+                "PRIMARY KEY($COLUMN_NAME_ID)"            +
                 ")"
 
         db?.execSQL(CREATE_TABLE)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
+
         val DROP_TABLE = "DROP TABLE IF EXISTS $TABLE_NAME"
 
         db?.execSQL(DROP_TABLE)
@@ -39,11 +40,11 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
         val db = writableDatabase
         val valeus = contentValuesOf().apply {
 
-            put(DESCRIP, expense.descrip)
-            put(VALUE,   expense.value)
-            put(DATE,    expense.date)
-            put(PARCEL,  expense.parcel)
-            put(PAID,    expense.paid)
+            put(COLUMN_NAME_DESCRIP, expense.descrip)
+            put(COLUMN_NAME_VALUE,   expense.value)
+            put(COLUMN_NAME_DATE,    expense.date)
+            put(COLUMN_NAME_PARCEL,  expense.parcel)
+            put(COLUMN_NAME_PAID,    expense.paid)
         }
 
         db.insert(TABLE_NAME, null, valeus)
@@ -52,7 +53,9 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
     fun getExpense(id: Int): Expense{
 
         val db = readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $ID = $id"
+        val selectQuery = "SELECT * FROM $TABLE_NAME" +
+                " WHERE $COLUMN_NAME_ID = $id"
+
         val cursor = db.rawQuery(selectQuery, null)
 
         cursor?.moveToFirst()
@@ -67,12 +70,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
     fun populateExpense(cursor: Cursor): Expense{
         val expense = Expense()
 
-        expense.id      = cursor.getInt(cursor.getColumnIndex(ID))
-        expense.descrip = cursor.getString(cursor.getColumnIndex(DESCRIP))
-        expense.value   = cursor.getString(cursor.getColumnIndex(VALUE))
-        expense.date    = cursor.getString(cursor.getColumnIndex(DATE))
-        expense.parcel  = cursor.getString(cursor.getColumnIndex(PARCEL))
-        expense.paid    = cursor.getString(cursor.getColumnIndex(PAID))
+        expense.id      = cursor.getInt(cursor.getColumnIndex(COLUMN_NAME_ID))
+        expense.descrip = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DESCRIP))
+        expense.value   = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_VALUE))
+        expense.date    = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_DATE))
+        expense.parcel  = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PARCEL))
+        expense.paid    = cursor.getString(cursor.getColumnIndex(COLUMN_NAME_PAID))
 
         return expense
     }
@@ -81,7 +84,7 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
 
         val expenseList = ArrayList<Expense>()
         val db = readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_NAME ORDER BY $ID"
+        val selectQuery = "SELECT * FROM $TABLE_NAME ORDER BY $COLUMN_NAME_ID"
         val cursor = db.rawQuery(selectQuery, null)
 
         if(cursor != null){
@@ -102,27 +105,32 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
         val db = writableDatabase
         val valeus = ContentValues().apply {
 
-            put(DESCRIP, expense.descrip)
-            put(VALUE,   expense.value)
-            put(DATE,    expense.date)
-            put(PARCEL,  expense.parcel)
-            put(PAID,    expense.paid)
+            put(COLUMN_NAME_DESCRIP, expense.descrip)
+            put(COLUMN_NAME_VALUE,   expense.value)
+            put(COLUMN_NAME_DATE,    expense.date)
+            put(COLUMN_NAME_PARCEL,  expense.parcel)
+            put(COLUMN_NAME_PAID,    expense.paid)
         }
-        db.update(TABLE_NAME, valeus,"$ID=?", arrayOf(expense.id.toString()))
+        db.update(TABLE_NAME, valeus,"$COLUMN_NAME_ID=?", arrayOf(expense.id.toString()))
     }
 
     fun deleteExpense(id: Int){
 
         val db = writableDatabase
 
-        db.delete(TABLE_NAME, "$ID=?", arrayOf(id.toString()))
+        db.delete(TABLE_NAME, "$COLUMN_NAME_ID=?", arrayOf(id.toString()))
     }
 
     fun searchExpense(str: String): ArrayList<Expense>{
 
         val expenseList = ArrayList<Expense>()
         val db = readableDatabase
-        val selectQuery = "SELECT * FROM $TABLE_NAME WHERE $DESCRIP LIKE '%$str%' OR $VALUE LIKE '%$str%' OR $DATE LIKE '%$str%' ORDER BY $ID"
+        val selectQuery = "SELECT * FROM $TABLE_NAME " +
+                "WHERE $COLUMN_NAME_DESCRIP LIKE '%$str%'" +
+                " OR   $COLUMN_NAME_VALUE   LIKE '%$str%'" +
+                " OR   $COLUMN_NAME_DATE    LIKE '%$str%'" +
+                " ORDER BY $COLUMN_NAME_ID"
+
         val cursor = db.rawQuery(selectQuery, null)
 
         if(cursor != null){
@@ -139,15 +147,15 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
     }
 
     companion object{
-        private val DB_VERSION = 1
-        private val DB_NAME    = "SaveExpense"
-        private val TABLE_NAME = "Expense"
+        private const val DB_VERSION = 1
+        private const val DB_NAME    = "SaveExpense"
+        private const val TABLE_NAME = "Expense"
 
-        private val ID      = "ID"
-        private val DESCRIP = "Description"
-        private val VALUE   = "Value"
-        private val DATE    = "Date"
-        private val PARCEL  = "Parcel"
-        private val PAID    = "Paid"
+        private const val COLUMN_NAME_ID      = "ID"
+        private const val COLUMN_NAME_DESCRIP = "Description"
+        private const val COLUMN_NAME_VALUE   = "Value"
+        private const val COLUMN_NAME_DATE    = "Date"
+        private const val COLUMN_NAME_PARCEL  = "Parcel"
+        private const val COLUMN_NAME_PAID    = "Paid"
     }
 }
