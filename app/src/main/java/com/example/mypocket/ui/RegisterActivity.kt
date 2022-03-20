@@ -5,6 +5,7 @@ import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.core.view.isVisible
 import com.example.mypocket.R
 import com.example.mypocket.dataBase.DataBaseHandler
@@ -19,7 +20,7 @@ import com.example.mypocket.model.Expense
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
-    val dataBaseHandler = DataBaseHandler(this)
+    private val dataBaseHandler = DataBaseHandler(this)
     var expense: Expense? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,26 +29,70 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        insertListeners()
+        if(intent.getStringExtra("mode") == "Edit"){ editExpense()
+        }else{ saveExpense()}
 
-        if(intent.getStringExtra("mode") == "Edit"){
+        binding.btnSave.setOnClickListener {
 
-            expense = dataBaseHandler.getExpense(intent.getIntExtra("id",0))
-            binding.toolBar.title = getString(R.string.edit_state)
-            binding.btnDelete.isVisible
+            if(testData()){
+                if(intent.getStringExtra("mode") == "Edit"){
 
-            binding.tilDescription.editText!!.setText(expense!!.descrip)
-            binding.tilValor.editText!!.setText(expense!!.value)
-            binding.tilDescription.editText!!.setText(expense!!.date)
+                    expense = populateExpense(expense)
+                    dataBaseHandler.updateExpense(expense!!)
 
-            if(expense!!.parcel == null){}
+                }else{
+
+                    expense = populateExpense(null)
+                    dataBaseHandler.addExpense(expense!!)
+                }
+                finish()
+
+            }else{ Toast.makeText(this, R.string.erro_data,Toast.LENGTH_LONG).show()}
         }
-
     }
 
-    fun insertListeners(){
+    private fun testData(): Boolean{
+        return binding.editDescription.text.toString() != "" &&
+                binding.editValue     .text.toString() != "" &&
+                binding.editDate      .text.toString() != ""
+    }
 
-        binding.tilDate.editText?.setOnClickListener{
+    private fun editExpense(){
+
+        expense = dataBaseHandler.getExpense(intent.getIntExtra("id",0))
+
+        binding.toolBar.title = getString(R.string.edit_state)
+        binding.btnDelete.isVisible
+
+        binding.editDescription.editText!!.setText(expense!!.descrip)
+        binding.editValue      .editText!!.setText(expense!!.value)
+        binding.editDate       .editText!!.setText(expense!!.date)
+        binding.editParcel     .editText!!.setText(expense!!.parcel)
+
+        binding.btnDelete.setOnClickListener {
+
+            dataBaseHandler.deleteExpense(expense!!.id)
+            finish()
+        }
+    }
+
+    private fun populateExpense(cost: Expense?): Expense{
+
+        val expense = Expense()
+
+        if(cost != null) expense.id = cost.id
+
+        expense.descrip = binding.editDescription.toString()
+        expense.value   = binding.editValue      .toString()
+        expense.date    = binding.editDate       .toString()
+        expense.parcel  = binding.editParcel     .toString()
+
+        return expense
+    }
+
+    private fun saveExpense(){
+
+        binding.editDate.editText?.setOnClickListener{
 
             val datePicker = MaterialDatePicker.Builder.datePicker().build()
 
@@ -56,7 +101,7 @@ class RegisterActivity : AppCompatActivity() {
                 val timeZone = TimeZone.getDefault()
                 val offSet = timeZone.getOffset(Date().time) * - 1
 
-                binding.tilDate.text = Date(it + offSet).format()
+                binding.editDate.text = Date(it + offSet).format()
 
             }
             datePicker.show(supportFragmentManager,"DATE_PICKER_TEST")
@@ -65,10 +110,10 @@ class RegisterActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
 
             val expense = Expense(
-                descrip = binding.tilDescription.text,
-                value = binding.tilValor.text,
-                date = binding.tilDate.text,
-                parcel = binding.tilParcel.text
+                descrip = binding.editDescription.text,
+                value   = binding.editValue      .text,
+                date    = binding.editValue      .text,
+                parcel  = binding.editParcel     .text
             )
             ExpenseDataSource.insertExpense(expense)
 

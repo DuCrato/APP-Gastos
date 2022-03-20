@@ -14,14 +14,12 @@ class DataBaseHandler(context: Context): SQLiteOpenHelper(context, DB_NAME, null
     override fun onCreate(db: SQLiteDatabase?) {
 
         val CREATE_TABLE = "CREATE TABLE $TABLE_NAME (" +
-                "$COLUMN_NAME_ID      INTERGER NOT NULL," +
-                "$COLUMN_NAME_DESCRIP TEXT     NOT NULL," +
-                "$COLUMN_NAME_VALUE   TEXT     NOT NULL," +
-                "$COLUMN_NAME_DATE    TEXT     NOT NULL," +
-                "$COLUMN_NAME_PARCEL  TEXT             ," +
-                "$COLUMN_NAME_PAID    TEXT     NOT NULL," +
-                "" +
-                "PRIMARY KEY($COLUMN_NAME_ID)"            +
+                "$COLUMN_NAME_ID      INTERGER ," +
+                "$COLUMN_NAME_DESCRIP TEXT     ," +
+                "$COLUMN_NAME_VALUE   TEXT     ," +
+                "$COLUMN_NAME_DATE    TEXT     ," +
+                "$COLUMN_NAME_PARCEL  TEXT     ," +
+                "$COLUMN_NAME_PAID    TEXT     ," +
                 ")"
 
         db?.execSQL(CREATE_TABLE)

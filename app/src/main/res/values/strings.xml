@@ -18,4 +18,6 @@
     <string name="label_paid_main">456,56</string>
 
     <string name="edit_state">Editar gasto</string>
+    <string name="erro_data">ERRO !!!</string>
+    <string name="search_expense">Procurar</string>
 </resources>

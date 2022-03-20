@@ -1,14 +1,24 @@
 package com.example.mypocket.ui
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mypocket.databinding.ItemExpenseBinding
 import com.example.mypocket.model.Expense
 
-class ExpenseListAdapter : ListAdapter<Expense, ExpenseListAdapter.ExpenseViewHolder>(DiffCallBack()){
+class ExpenseListAdapter(expenseList: ArrayList<Expense>, internal val context: Context, private val callBack:(Int) -> Unit):
+        RecyclerView.Adapter<ExpenseListAdapter.ExpenseViewHolder>(){
+
+    private var expenseList = ArrayList<Expense>()
+    init {
+        this.expenseList = expenseList
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpenseViewHolder{
 
@@ -20,29 +30,30 @@ class ExpenseListAdapter : ListAdapter<Expense, ExpenseListAdapter.ExpenseViewHo
 
     override fun onBindViewHolder(holder: ExpenseViewHolder, position: Int){
 
-        holder.bind(getItem(position))
+        val expense = expenseList[position]
+
+        holder.descrip.text = expense.descrip
+        holder.value  .text = expense.value
+        holder.date   .text = expense.date
+        holder.parcel .text = expense.parcel
+
+        holder.contraint.setOnClickListener {
+            callBack(expense.id)
+        }
+    }
+
+    inner class ExpenseViewHolder( private val binding: ItemExpenseBinding ): RecyclerView.ViewHolder(binding.root) {
+
+        val contraint: ConstraintLayout = binding.constraintItem
+
+        val descrip : TextView = binding.txtItemDescription
+        val value   : TextView = binding.txtItemValue
+        val date    : TextView = binding.txtItemDate
+        val parcel  : TextView = binding.txtItemParcel
 
     }
 
-    class ExpenseViewHolder(
-        private val binding: ItemExpenseBinding
-        ): RecyclerView.ViewHolder(binding.root) {
-
-            fun bind(item: Expense){
-
-                binding.txtItemDescription.text = item.descrip
-                binding.txtItemValue.text       = item.value
-                binding.txtItemDate.text        = item.date
-                binding.txtItemParcel.text      = item.parcel
-            }
+    override fun getItemCount(): Int {
+        return expenseList.size
     }
-}
-
-class DiffCallBack: DiffUtil.ItemCallback<Expense>(){
-
-    override fun areItemsTheSame(oldItem: Expense, newItem: Expense) = oldItem == newItem
-
-    override fun areContentsTheSame(oldItem: Expense, newItem: Expense) = oldItem.id == newItem.id
-
-
 }
